@@ -1,0 +1,552 @@
+/* ============================================
+   RESET & BASE
+   ============================================ */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --bg: #fafafa;
+  --surface: #ffffff;
+  --border: #dddddd;
+  --border-light: #eeeeee;
+  --text: #262626;
+  --text-secondary: #5c5c5c;
+  --green-primary: #2db55d;
+  --green-hover: #269e4f;
+  --green-active: #1e8541;
+  --green-tab: #262626;
+  --tab-inactive: #8c8c8c;
+  --accent: #007aff;
+  --code-bg: #f7f8fa;
+  --code-border: #e8e8e8;
+  --result-bg: #ffffff;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, .05);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, .05);
+  --radius: 8px;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: 'Fira Code', 'Menlo', 'Monaco', 'Consolas', monospace;
+}
+
+html,
+body {
+  height: 100%;
+  font-family: var(--font-sans);
+  background: var(--bg);
+  color: var(--text);
+  overflow: hidden;
+}
+
+/* ============================================
+   APP CONTAINER — side-by-side split
+   ============================================ */
+.app-container {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+}
+
+/* ============================================
+   LEFT PANEL — Problem description
+   ============================================ */
+.left-panel {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  min-width: 340px;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+}
+
+/* ---------- Tabs Bar ---------- */
+.tabs-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  height: 48px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  background: var(--surface);
+}
+
+.tabs-left {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.tab {
+  position: relative;
+  background: none;
+  border: none;
+  padding: 6px 14px;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--tab-inactive);
+  cursor: pointer;
+  border-radius: var(--radius);
+  transition: color .2s, background .2s;
+}
+
+.tab:hover {
+  color: var(--text);
+  background: rgba(0, 0, 0, .04);
+}
+
+.tab.active {
+  color: var(--text);
+  font-weight: 500;
+}
+
+.tab.active::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 2px;
+  background: var(--text);
+  z-index: 10;
+}
+
+.tabs-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.nav-btn {
+  padding: 6px 16px;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 500;
+  color: #fff;
+  background: var(--green-primary);
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: all .2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.nav-btn:hover {
+  background: var(--green-hover);
+}
+
+.nav-btn:active {
+  background: var(--green-active);
+  transform: scale(.97);
+}
+
+.icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  cursor: pointer;
+  color: var(--text-secondary);
+  transition: background .2s, color .2s;
+}
+
+.icon-btn:hover {
+  background: rgba(0, 0, 0, .04);
+  color: var(--text);
+}
+
+/* ---------- Problem Content ---------- */
+.problem-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px 28px 16px;
+  line-height: 1.7;
+  font-size: 14px;
+}
+
+.problem-content p {
+  margin-bottom: 14px;
+}
+
+.problem-content code {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  background: var(--code-bg);
+  border: 1px solid var(--code-border);
+  padding: 1px 5px;
+  border-radius: 3px;
+  color: #c62828;
+}
+
+.problem-content .example {
+  margin: 18px 0;
+}
+
+.problem-content .example h4 {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.problem-content .example pre {
+  background: var(--code-bg);
+  border: 1px solid var(--code-border);
+  border-radius: var(--radius);
+  padding: 12px 16px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.6;
+  overflow-x: auto;
+  color: var(--text);
+}
+
+/* ---------- Compile bar ---------- */
+.compile-bar {
+  padding: 12px 28px;
+  border-top: 1px solid var(--border);
+  flex-shrink: 0;
+  background: var(--surface);
+  display: flex;
+  align-items: center;
+}
+
+/* ============================================
+   EDITOR SECTION
+   ============================================ */
+.editor-section {
+  display: flex;
+  flex-direction: column;
+  height: 60%;
+  border-top: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.editor-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+  background: #fdfdfd;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.language-selector {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.language-selector select {
+  border: none;
+  background: none;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 4px 0;
+}
+
+.language-selector .auto-label {
+  font-size: 12px;
+  color: #bbb;
+}
+
+.editor-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.editor-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.2s;
+}
+
+.run-btn {
+  background: #f0f0f0;
+  color: var(--text);
+  border-color: #ddd;
+}
+
+.run-btn:hover {
+  background: #e8e8e8;
+}
+
+.submit-btn {
+  background: var(--green-primary);
+  color: #fff;
+}
+
+.submit-btn:hover {
+  background: var(--green-hover);
+}
+
+.editor-body {
+  flex: 1;
+  overflow: hidden;
+  background: #fff;
+}
+
+#codeEditor {
+  width: 100%;
+  height: 100%;
+  border: none;
+  outline: none;
+  padding: 16px;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  line-height: 1.6;
+  resize: none;
+  color: #333;
+}
+
+.editor-footer {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 16px;
+  font-size: 11px;
+  color: #aaa;
+  background: #fff;
+  border-top: 1px solid var(--border-light);
+}
+
+.compile-btn {
+  padding: 12px 32px;
+  font-family: var(--font-sans);
+  font-size: 15px;
+  font-weight: 500;
+  color: #fff;
+  background: var(--green-primary);
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: all .2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 4px rgba(45, 181, 93, 0.2);
+}
+
+.compile-btn:hover {
+  background: var(--green-hover);
+  box-shadow: var(--shadow-md);
+}
+
+.compile-btn:active {
+  background: var(--green-active);
+  transform: scale(.97);
+}
+
+/* ============================================
+   RIGHT PANEL — Game + Results
+   ============================================ */
+.right-panel {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 340px;
+  background: var(--bg);
+}
+
+/* ---------- Game Container ---------- */
+.game-container {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  background: var(--bg);
+}
+
+.game-container iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: block;
+}
+
+/* ---------- Result Section ---------- */
+.result-section {
+  height: 140px;
+  min-height: 100px;
+  background: var(--surface);
+  border-top: 2px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+
+.result-tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid var(--border);
+  background: var(--result-bg);
+  flex-shrink: 0;
+}
+
+.result-tab {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 20px;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: color .2s, border-color .2s;
+}
+
+.result-tab:hover {
+  color: var(--text);
+}
+
+.result-tab.active {
+  color: var(--text);
+  font-weight: 600;
+  border-bottom-color: var(--green-primary);
+}
+
+.result-tab-icon {
+  font-size: 14px;
+}
+
+.result-content {
+  flex: 1;
+  padding: 14px 20px;
+  overflow-y: auto;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.result-placeholder {
+  font-style: italic;
+  color: #aaa;
+}
+
+/* ============================================
+   SCROLLBAR STYLING
+   ============================================ */
+.problem-content::-webkit-scrollbar,
+.result-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.problem-content::-webkit-scrollbar-track,
+.result-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.problem-content::-webkit-scrollbar-thumb,
+.result-content::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 3px;
+}
+
+.problem-content::-webkit-scrollbar-thumb:hover,
+.result-content::-webkit-scrollbar-thumb:hover {
+  background: #aaa;
+}
+
+/* ============================================
+   COMPILE ANIMATION
+   ============================================ */
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(76, 175, 80, .5);
+  }
+
+  70% {
+    box-shadow: 0 0 0 10px rgba(76, 175, 80, 0);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba(76, 175, 80, 0);
+  }
+}
+
+.compile-btn.compiling {
+  animation: pulse 1s ease-in-out infinite;
+  pointer-events: none;
+  opacity: .85;
+}
+
+/* ============================================
+   RESULT STATES
+   ============================================ */
+.result-pass {
+  color: var(--green-primary);
+  font-weight: 600;
+}
+
+.result-fail {
+  color: #e53935;
+  font-weight: 600;
+}
+
+.result-output {
+  margin-top: 8px;
+}
+
+.result-output pre {
+  background: var(--code-bg);
+  border: 1px solid var(--code-border);
+  border-radius: var(--radius);
+  padding: 10px 14px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1.5;
+  overflow-x: auto;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 800px) {
+  .app-container {
+    flex-direction: column;
+  }
+
+  .left-panel {
+    width: 100%;
+    height: 50%;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .right-panel {
+    min-width: unset;
+    height: 50%;
+  }
+}
+
+/* ============================================
+   PROBLEM CONTENT — JSON-driven fields
+   ============================================ */
+.problem-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 12px;
+}
+
+.problem-description {
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  margin-bottom: 16px;
+}

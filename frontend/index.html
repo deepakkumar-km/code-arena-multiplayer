@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Code Arena</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #050a0f;
+      color: white;
+    }
+
+    .matrix {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: linear-gradient(#020409, #050a0f);
+      z-index: -1;
+    }
+
+    .lobby-container {
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .pulseCard {
+      width: 350px;
+      padding: 40px;
+      background: #0a121a;
+      border-radius: 12px;
+      border: 1px solid #1c2b3a;
+      box-shadow: 0 0 20px rgba(0,255,150,.15);
+    }
+
+    .pulseCard h1 {
+      text-align: center;
+      color: #00ff88;
+      margin-top: 0;
+    }
+
+    label {
+      font-size: 12px;
+      opacity: .7;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      margin-bottom: 15px;
+      border-radius: 6px;
+      border: none;
+      background: #0f1b26;
+      color: white;
+      box-sizing: border-box;
+    }
+
+    button {
+      padding: 10px 20px;
+      background: #00ff88;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    button:hover { opacity: .8; }
+    button:disabled { opacity: .4; cursor: not-allowed; }
+
+    #statusMsg {
+      margin-top: 16px;
+      font-size: 13px;
+      text-align: center;
+      min-height: 20px;
+      color: #00ff88;
+    }
+
+    #statusMsg.error { color: #ff4f4f; }
+
+    /* Character badge shown after join */
+    #characterBadge {
+      display: none;
+      margin-top: 16px;
+      padding: 10px;
+      background: #0f1b26;
+      border-radius: 8px;
+      text-align: center;
+      font-size: 12px;
+    }
+
+    #characterBadge span {
+      display: block;
+      font-size: 18px;
+      font-weight: bold;
+      color: #00ff88;
+      margin-top: 4px;
+    }
+  </style>
+</head>
+<body>
+  <div class="matrix"></div>
+
+  <div class="lobby-container">
+    <div class="pulseCard">
+      <h1>CODE ARENA</h1>
+
+      <label>PLAYER ID</label>
+      <input id="usernameInput" placeholder="Player Username" />
+
+      <label>ROOM ID</label>
+      <input id="roomInput" placeholder="e.g QF1" />
+
+      <button id="enterBtn">ENTER ARENA</button>
+
+      <div id="characterBadge">
+        YOU ARE
+        <span id="characterName"></span>
+      </div>
+
+      <div id="statusMsg"></div>
+    </div>
+  </div>
+
+  <!-- Socket.io client from CDN -->
+  <script src="https://cdn.socket.io/4.7.4/socket.io.min.js"></script>
+  <script>
+    const enterBtn = document.getElementById('enterBtn');
+    const usernameInput = document.getElementById('usernameInput');
+    const roomInput = document.getElementById('roomInput');
+    const statusMsg = document.getElementById('statusMsg');
+    const characterBadge = document.getElementById('characterBadge');
+    const characterName = document.getElementById('characterName');
+
+    // Connect to the backend Socket.io server
+    const socket = io('http://localhost:4000');
+
+    function setStatus(msg, isError = false) {
+      statusMsg.textContent = msg;
+      statusMsg.className = isError ? 'error' : '';
+    }
+
+    enterBtn.addEventListener('click', () => {
+      const username = usernameInput.value.trim();
+      const roomId = roomInput.value.trim();
+      if (!username || !roomId) {
+        setStatus('Please fill in both fields.', true);
+        return;
+      }
+      enterBtn.disabled = true;
+      setStatus('Connecting...');
+      socket.emit('join_room', { username, roomId });
+    });
+
+    socket.on('room_full', () => {
+      setStatus('Room is full! Try a different Room ID.', true);
+      enterBtn.disabled = false;
+    });
+
+    socket.on('joined_room', ({ character }) => {
+      characterBadge.style.display = 'block';
+      characterName.textContent = character === 'samuraiMack' ? 'SAMURAI MACK ⚔️' : 'KENJI 🥷';
+    });
+
+    socket.on('waiting_for_opponent', () => {
+      setStatus('⏳ Waiting for opponent to join...');
+    });
+
+    socket.on('game_start', ({ players }) => {
+      setStatus('⚔️ Opponent found! Launching arena...');
+      // Store session info so App.jsx can read it
+      const myChar = players.find(p => p.username === usernameInput.value.trim())?.character || 'samuraiMack';
+      sessionStorage.setItem('ca_username', usernameInput.value.trim());
+      sessionStorage.setItem('ca_roomId', roomInput.value.trim());
+      sessionStorage.setItem('ca_character', myChar);
+      sessionStorage.setItem('ca_players', JSON.stringify(players));
+
+      setTimeout(() => {
+        // Replace the page with the React app
+        window.location.href = '/arena.html';
+      }, 800);
+    });
+
+    socket.on('connect_error', () => {
+      setStatus('Cannot connect to server. Is the backend running?', true);
+      enterBtn.disabled = false;
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,153 @@
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Press Start 2P', cursive;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background-color: #fafafa;
+    }
+
+    /* Main container that holds everything */
+    #main-game-wrapper {
+      position: relative;
+      width: 1024px;
+      height: 576px;
+      /* Responsive scaling while maintaining aspect ratio */
+      transform-origin: center;
+      display: flex;
+      flex-direction: column;
+    }
+
+    canvas {
+      display: block;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="main-game-wrapper">
+    <!-- UI Overlay for Health Bars and Timer -->
+    <div style="
+        position: absolute;
+        display: flex;
+        width: 100%;
+        align-items: center;
+        padding: 20px;
+        z-index: 10;
+        pointer-events: none;
+      ">
+      <!-- player health -->
+      <div style="
+          position: relative;
+          width: 100%;
+          display: flex;
+          justify-content: flex-end;
+          border-top: 4px solid white;
+          border-left: 4px solid white;
+          border-bottom: 4px solid white;
+        ">
+        <div style="background-color: red; height: 30px; width: 100%"></div>
+        <div id="playerHealth" style="
+            position: absolute;
+            background: #818cf8;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            width: 100%;
+          "></div>
+      </div>
+
+      <!-- timer -->
+      <div id="timer" style="
+          background-color: black;
+          width: 120px;
+          height: 50px;
+          flex-shrink: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: white;
+          border: 4px solid white;
+          font-size: 12px;
+          pointer-events: auto;
+        ">
+        30:00
+      </div>
+      <!-- enemy health -->
+      <div style="
+          position: relative;
+          width: 100%;
+          border-top: 4px solid white;
+          border-bottom: 4px solid white;
+          border-right: 4px solid white;
+        ">
+        <div style="background-color: red; height: 30px"></div>
+        <div id="enemyHealth" style="
+            position: absolute;
+            background: #818cf8;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+          "></div>
+      </div>
+    </div>
+
+    <!-- Win/Loss Text -->
+    <div id="displayText" style="
+        position: absolute;
+        color: white;
+        align-items: center;
+        justify-content: center;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        display: none;
+        z-index: 20;
+      ">
+      Tie
+    </div>
+
+    <canvas></canvas>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"
+    integrity="sha512-H6cPm97FAsgIKmlBA4s774vqoN24V5gSQL4yBTDOY2su2DeXZVhQPxFK4P6GPdnZqM9fg1G3cMv5wD7e6cFLZQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/classes.js"></script>
+  <script src="index.js"></script>
+
+  <script>
+    // Simple script to keep the game container centered and scaled
+    function scaleGame() {
+      const wrapper = document.getElementById('main-game-wrapper');
+      const windowWidth = window.innerWidth;
+      const windowHeight = window.innerHeight;
+
+      const widthRatio = windowWidth / 1024;
+      const heightRatio = windowHeight / 576;
+      const scale = Math.min(widthRatio, heightRatio);
+
+      wrapper.style.transform = `scale(${scale})`;
+    }
+
+    window.addEventListener('resize', scaleGame);
+    scaleGame();
+  </script>
+</body>

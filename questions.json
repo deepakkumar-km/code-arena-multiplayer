@@ -1,0 +1,66 @@
+[
+  {
+    "title": "Sum of Two",
+    "difficulty": "Easy",
+    "description": "Write a function add(a, b) that returns the sum of two numbers.",
+    "expectedOutput": "add(5, 10) should return 15",
+    "damage": 10,
+    "status": true
+  },
+  {
+    "title": "Reverse a String",
+    "difficulty": "Easy",
+    "description": "Write a function reverse(s) that returns the reversed version of a string.",
+    "expectedOutput": "reverse('hello') should return 'olleh'",
+    "damage": 10,
+    "status": true
+  },
+  {
+    "title": "FizzBuzz (Disabled)",
+    "difficulty": "Easy",
+    "description": "This question is disabled.",
+    "expectedOutput": "N/A",
+    "damage": 5,
+    "status": false
+  },
+  {
+    "title": "Longest Substring Without Repeating",
+    "difficulty": "Medium",
+    "description": "Given a string s, find the length of the longest substring without repeating characters.",
+    "expectedOutput": "lengthOfLongestSubstring('abcabcbb') should return 3",
+    "damage": 20,
+    "status": true
+  },
+  {
+    "title": "Add Two Numbers (Linked List)",
+    "difficulty": "Medium",
+    "description": "You are given two non-empty linked lists representing two non-negative integers stored in reverse order. Add the two numbers and return the sum as a linked list.",
+    "expectedOutput": "addTwoNumbers([2,4,3], [5,6,4]) should return [7,0,8]",
+    "damage": 20,
+    "status": true
+  },
+  {
+    "title": "Median of Two Sorted Arrays",
+    "difficulty": "Hard",
+    "description": "Given two sorted arrays nums1 and nums2 of size m and n, return the median of the two sorted arrays. The overall run time complexity should be O(log(m+n)).",
+    "expectedOutput": "findMedianSortedArrays([1,3], [2]) should return 2.0",
+    "damage": 35,
+    "status": true
+  },
+  {
+    "title": "Trapping Rain Water",
+    "difficulty": "Hard",
+    "description": "Given n non-negative integers representing an elevation map where the width of each bar is 1, compute how much water it can trap after raining.",
+    "expectedOutput": "trap([0,1,0,2,1,0,1,3,2,1,2,1]) should return 6",
+    "damage": 35,
+    "status": true
+  },
+  {
+    "title": "Regular Expression Matching",
+    "difficulty": "Extreme",
+    "description": "Given an input string s and a pattern p, implement regular expression matching with support for '.' and '*' where '.' matches any single character and '*' matches zero or more of the preceding element. The matching should cover the entire input string.",
+    "expectedOutput": "isMatch('aa', 'a*') should return true",
+    "damage": 50,
+    "status": true
+  }
+]
